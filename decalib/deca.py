@@ -35,7 +35,7 @@ from .utils.config import cfg
 torch.backends.cudnn.benchmark = True
 
 class DECA(object):
-    def __init__(self, config=None, device='cuda'):
+    def __init__(self, config=None, device='cpu'):
         if config is None:
             self.cfg = cfg
         else:
@@ -83,7 +83,7 @@ class DECA(object):
         model_path = self.cfg.pretrained_modelpath
         if os.path.exists(model_path):
             print(f'trained model found. load {model_path}')
-            checkpoint = torch.load(model_path)
+            checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
             self.checkpoint = checkpoint
             util.copy_state_dict(self.E_flame.state_dict(), checkpoint['E_flame'])
             util.copy_state_dict(self.E_detail.state_dict(), checkpoint['E_detail'])
